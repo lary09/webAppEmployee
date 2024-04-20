@@ -71,30 +71,20 @@
     </style>
 </head>
 <body>
-    <h1>Lista de Empleados</h1>
+<div class="container">
+    <h1>Employee List</h1>
     <table>
         <tr>
             <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Salario</th>
-            <th>Acciones</th>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Salary</th>
+            <th>Acctions</th>
         </tr>
-        <c:forEach var="employee" items="${employees}">
-            <tr>
-                <td>${employee.id}</td>
-                <td>${employee.name}</td>
-                <td>${employee.lastName}</td>
-                <td>${employee.salary}</td>
-                <td>
-                    <a href="employee?action=list&id={employee.id}" class="button action-link">Mostrar</a>
-                    <a href="employee?action=edit&id=${employee.id}" class="button action-link">Editar</a>
-                    <a href="employee?action=delete&id=${employee.id}" class="button action-link">Eliminar</a>
-                </td>
-            </tr>
-        </c:forEach>
+        ${employees}
     </table>
-    <a href="employee?action=save" class="button">Agregar Nuevo Empleado</a>
+    <a href="/webAppEmployee/employee/create" class="button">Add a new Employee</a>
+    </div>
 </body>
 </html>
 

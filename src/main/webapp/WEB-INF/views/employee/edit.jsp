@@ -21,7 +21,6 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: left;
-            width: 400px;
         }
 
         h1 {
@@ -45,16 +44,10 @@
             font-size: 16px;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-            margin-top: 20px;
-        }
-
         input[type="submit"],
         a.button {
-            display: inline-block;
+            display: block;
+            width: fit-content;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -65,7 +58,6 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-right: 10px;
         }
 
         input[type="submit"]:hover,
@@ -80,22 +72,30 @@
         a.button.secondary:hover {
             background-color: #5a6268;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <form action="/webAppEmployee/employee" method="post">
         <input type="hidden" name="action" value="employee">
-        <input type="hidden" name="id" value="${employee.id}">
-        <h1>Create an Employee</h1>
+        <h1>Edit Employee</h1>
+        <label for="id">ID:</label>
+        <input type="number" name="id" value="${employee.getId()}">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="${employee.name}" required><br>
+        <input type="text" id="name" name="name" value="${employee.getNombre()}" required><br>
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" value="${employee.lastName}" required><br>
+        <input type="text" id="lastName" name="lastName" value="${employee.getApellido()}" required><br>
         <label for="salary">Salary:</label>
-        <input type="number" id="salary" name="salary" value="${employee.salary}" required><br>
+        <input type="number" id="salary" name="salary" value="${employee.getSalario()}" required><br>
         <div class="button-container">
-            <input type="submit" value="Save">
-            <a href="/webAppEmployee/employee" class="button secondary">Go to List</a>
+            <input type="submit" value="Edit">
+            <a href="/webAppEmployee/employee" class="button secondary">Go to list</a>
         </div>
     </form>
 </body>

@@ -1,7 +1,6 @@
 package controllers;
 
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,114 +21,94 @@ public class EmployeeController extends HttpServlet {
         employeeService = new EmployeeService();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
 
-        if (action == null) {
-            action = "list";
+        String employeeRepresentation = "";
+        List<Employee> employees = null;
+        try {
+            employees = employeeService.getAllEmployee();
+            for (Employee employee : employees) {
+                employeeRepresentation += "<tr>";
+                employeeRepresentation += "<td>" + employee.getId() + "</td>";
+                employeeRepresentation += "<td>" + employee.getNombre() + "</td>";
+                employeeRepresentation += "<td>" + employee.getApellido() + "</td>";
+                employeeRepresentation += "<td>" + employee.getSalario() + "</td>";
+                employeeRepresentation += "<td>";
+                employeeRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + employee.getId() + "' class=\"button action-link\">Edit</a>";
+                employeeRepresentation += "<a href='/webAppEmployee/employee/show?id=" + employee.getId() + "' class=\"button action-link\">Show</a>";
+                employeeRepresentation += "<a href='/webAppEmployee/employee/delete?id=" + employee.getId() + "' class=\"button action-link\">Delete</a>";
+                employeeRepresentation += "</td>";
+                employeeRepresentation += "</tr>";
+            }
+        } catch (SQLException e) {
+            employeeRepresentation = "Nothing to show";
         }
 
-        switch (action) {
-            case "list":
-                try {
-                    listEmployees(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "save":
-                try {
-                    saveEmployee(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "show":
-                try {
-                    showEmployee(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "edit":
-                try {
-                    editEmployee(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case "delete":
-                try {
-                    deleteEmployee(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            default:
-                try {
-                    listEmployees(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-        }
-    }
 
-    private void listEmployees(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        List<Employee> employees = employeeService.getAllEmployee();
-        request.setAttribute("employees", employees);
+        request.setAttribute("employees", employeeRepresentation);
         request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
 
     }
-    private void saveEmployee(HttpServletRequest request, HttpServletResponse response)
-            throws  ServletException, IOException, SQLException{
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idStr = request.getParameter("id");
+        int id = 0;
+        if (idStr != null && !idStr.isEmpty()) {
+            id = Integer.parseInt(idStr);
+        }
         String name = request.getParameter("name");
         String lastName = request.getParameter("lastName");
         String salaryStr = request.getParameter("salary");
         double salary;
-        if(salaryStr != null && !salaryStr.isEmpty()){
-             salary = Double.parseDouble(salaryStr);
-        }else{
+        if (salaryStr != null && !salaryStr.isEmpty()) {
+            salary = Double.parseDouble(salaryStr);
+        } else {
             salary = 0.0;
         }
-        Employee newEmployee = new Employee(0, name, lastName, salary);
-        employeeService.insertEmployee(newEmployee);
-        request.getRequestDispatcher("/WEB-INF/views/employee/form.jsp").forward(request, response);
-        response.sendRedirect(request.getContextPath() + "/employee?action=list");
+        Employee newEmployee = new Employee(id, name, lastName, salary);
+        try {
+            if (newEmployee.getId()!= 0) {
+
+               boolean employee = employeeService.updateEmployee(newEmployee);
+                request.setAttribute("employee", employee);
+            } else {
+                employeeService.insertEmployee(newEmployee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        //request.getRequestDispatcher("/WEB-INF/views/employee/form.jsp").forward(request, response);
+        response.sendRedirect( "/webAppEmployee/employee");
     }
 
-    private void showEmployee(HttpServletRequest request, HttpServletResponse response)
+    private void showEmployee(int employeeId)
             throws ServletException, IOException, SQLException {
-        int employeeId = Integer.parseInt(request.getParameter("id"));
         Employee employee = employeeService.getEmployeeById(employeeId);
-        request.setAttribute("employee", employee);
-        request.getRequestDispatcher("/WEB-INF/views/employee/show.jsp").forward(request, response);
+
     }
 
-    private void editEmployee(HttpServletRequest request, HttpServletResponse response)
+    private void editEmployee(int id, String name, String lastName, String salaryStr)
             throws ServletException, IOException, SQLException {
-        String name = request.getParameter("name");
-        String lastName = request.getParameter("lastName");
-        double salary = Double.parseDouble(request.getParameter("salary"));
-        int id = Integer.parseInt(request.getParameter("id"));
+        double salary;
+        if (salaryStr != null && !salaryStr.isEmpty()) {
+            salary = Double.parseDouble(salaryStr);
+        } else {
+            salary = 0.0;
+        }
 
-        Employee employeeEdited = new Employee(id,name,lastName,salary);
+        Employee employeeEdited = new Employee(id, name, lastName, salary);
         employeeService.updateEmployee(employeeEdited);
-        request.setAttribute("employee", employeeEdited);
-        request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request,response);
     }
 
     private void deleteEmployee(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
         employeeService.deleteEmployee(id);
+        //request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
     }
 }
 

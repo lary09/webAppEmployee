@@ -40,6 +40,22 @@
     <servlet-name>show</servlet-name>
     <url-pattern>/show</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>edit</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/edit.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>edit</servlet-name>
+    <url-pattern>/edit</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>departmentTable</servlet-name>
+    <jsp-file>/WEB-INF/views/deparment/departmentTable.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>departmentTable</servlet-name>
+    <url-pattern>/departmentTable</url-pattern>
+  </servlet-mapping>
 
   <jsp-config>
     <jsp-property-group>
@@ -47,6 +63,7 @@
       <url-pattern>/WEB-INF/views/employee/*</url-pattern>
     </jsp-property-group>
   </jsp-config>
+
 </web-app>
 
 

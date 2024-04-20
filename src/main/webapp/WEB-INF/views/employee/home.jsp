@@ -51,11 +51,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Bienvenido al CRUD de Empleados</h1>
+        <h1>Welcome to Employee CRUD</h1>
         <ul>
-            <li><a href="employee?action=save">Crear Empleado</a></li>
-            <li><a href="employee?action=list">Lista Empleados</a></li>
-            <li><a href="employee?action=show&id=1">Mostrar Empleado</a></li>
+            <li><a href="/webAppEmployee/employee/create">Employee Form</a></li>
+            <li><a href="/webAppEmployee/employee">Employee List</a></li>
+            <li><a href="/webAppEmployee/employee/show?id=1">Show an Employee</a></li>
         </ul>
     </div>
 </body>
