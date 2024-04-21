@@ -71,7 +71,6 @@ public class EmployeeController extends HttpServlet {
         Employee newEmployee = new Employee(id, name, lastName, salary);
         try {
             if (newEmployee.getId()!= 0) {
-
                boolean employee = employeeService.updateEmployee(newEmployee);
                 request.setAttribute("employee", employee);
             } else {
@@ -85,30 +84,6 @@ public class EmployeeController extends HttpServlet {
         response.sendRedirect( "/webAppEmployee/employee");
     }
 
-    private void showEmployee(int employeeId)
-            throws ServletException, IOException, SQLException {
-        Employee employee = employeeService.getEmployeeById(employeeId);
 
-    }
-
-    private void editEmployee(int id, String name, String lastName, String salaryStr)
-            throws ServletException, IOException, SQLException {
-        double salary;
-        if (salaryStr != null && !salaryStr.isEmpty()) {
-            salary = Double.parseDouble(salaryStr);
-        } else {
-            salary = 0.0;
-        }
-
-        Employee employeeEdited = new Employee(id, name, lastName, salary);
-        employeeService.updateEmployee(employeeEdited);
-    }
-
-    private void deleteEmployee(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        employeeService.deleteEmployee(id);
-        //request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
-    }
 }
 

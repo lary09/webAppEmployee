@@ -55,7 +55,7 @@
         <ul>
             <li><a href="/webAppEmployee/employee/create">Employee Form</a></li>
             <li><a href="/webAppEmployee/employee">Employee List</a></li>
-            <li><a href="/webAppEmployee/employee/show?id=1">Show an Employee</a></li>
+            <li><a href="/webAppEmployee/department">Department List</a></li>
         </ul>
     </div>
 </body>

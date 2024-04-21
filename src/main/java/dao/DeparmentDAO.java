@@ -60,11 +60,11 @@ public class DeparmentDAO {
     public boolean updateDepartment(Deparment deparment) throws SQLException{
         boolean rowUpdated;
         Connection connection = conectionDB.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_DEPARMENT);
-         preparedStatement.setInt(1, deparment.getId());
-         preparedStatement.setString(2, deparment.getName());
-         preparedStatement.setString(3, deparment.getDescription());
-         rowUpdated = preparedStatement.executeUpdate() > 0;
+        PreparedStatement statement = connection.prepareStatement(UPDATE_DEPARMENT);
+         statement.setString(1, deparment.getName());
+         statement.setString(2, deparment.getDescription());
+         statement.setInt(3, deparment.getId());
+         rowUpdated = statement.executeUpdate() > 0;
          return rowUpdated;
     }
     public boolean deleteDeparment(int id) throws SQLException{

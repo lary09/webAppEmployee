@@ -28,9 +28,9 @@ public class DepartmentController extends HttpServlet {
                 deparmentRepresentation += "<td>" + deparment.getDescription() + "</td>";
                 //employeeRepresentation += "<td>" + employee.getSalario() + "</td>";
                 deparmentRepresentation += "<td>";
-                deparmentRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + deparment.getId() + "' class=\"button action-link\">Edit</a>";
-                deparmentRepresentation += "<a href='/webAppEmployee/employee/show?id=" + deparment.getId() + "' class=\"button action-link\">Show</a>";
-                deparmentRepresentation += "<a href='/webAppEmployee/employee/delete?id=" + deparment.getId() + "' class=\"button action-link\">Delete</a>";
+                deparmentRepresentation += "<a href='/webAppEmployee/department/edit?id=" + deparment.getId() + "' class=\"button action-link\">Edit</a>";
+                deparmentRepresentation += "<a href='/webAppEmployee/department/show?id=" + deparment.getId() + "' class=\"button action-link\">Show</a>";
+                deparmentRepresentation += "<a href='/webAppEmployee/department/delete?id=" + deparment.getId() + "' class=\"button action-link\">Delete</a>";
                 deparmentRepresentation += "</td>";
                 deparmentRepresentation += "</tr>";
             }
@@ -39,6 +39,30 @@ public class DepartmentController extends HttpServlet {
         }
         request.setAttribute("departments", deparmentRepresentation);
         request.getRequestDispatcher("/WEB-INF/views/deparment/departmentTable.jsp").forward(request, response);
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String idStr = request.getParameter("id");
+        int id = 0;
+        if (idStr != null && !idStr.isEmpty()) {
+            id = Integer.parseInt(idStr);
+        }
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        Deparment newDeparment = new Deparment(id , name, description);
+        try {
+            if (newDeparment.getId()!= 0) {
+                boolean department = departmentService.updateDepartment(newDeparment);
+                request.setAttribute("department", department);
+            } else {
+                departmentService.inertDepartment(newDeparment);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        //request.getRequestDispatcher("/WEB-INF/views/employee/createDepartment.jsp").forward(request, response);
+        response.sendRedirect( "/webAppEmployee/department");
     }
 
 }
