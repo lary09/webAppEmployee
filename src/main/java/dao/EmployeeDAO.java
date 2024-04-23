@@ -9,17 +9,21 @@ import java.util.List;
 
 public class EmployeeDAO {
     ConectionDB conectionDB = new ConectionDB();
-    private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario) VALUES (?, ?, ?)";
+    private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
     public void insertEmployee(Employee employee) throws SQLException {
         Connection connection =conectionDB.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLEADO_SQL);
         preparedStatement.setString(1, employee.getNombre());
         preparedStatement.setString(2, employee.getApellido());
         preparedStatement.setDouble(3, employee.getSalario());
+        preparedStatement.setInt(4, employee.getDepartment_id());
         preparedStatement.executeUpdate();
 
     }
-    private static final String SELECT_EMPLEADO_BY_ID = "SELECT id, nombre, apellido, salario FROM empleado WHERE id = ?";
+
+    private static final String SELECT_EMPLEADO_BY_ID = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+            "FROM empleado e JOIN department d ON e.department_id = d.id " +
+            "WHERE e.id = ?";
     public Employee getEmployeeById(int id) {
         Employee employee = null;
         try (Connection connection = conectionDB.getConnection();
@@ -31,14 +35,18 @@ public class EmployeeDAO {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 double salario = rs.getDouble("salario");
-                employee = new Employee(id, nombre, apellido, salario);
+                String departmentName = rs.getString("department_name");
+                int departmentId = rs.getInt("department_id");
+                employee = new Employee(id, nombre, apellido, salario, departmentId, departmentName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return employee;
     }
-    private static final String SELECT_ALL_EMPLEADOS = "SELECT * FROM empleado";
+    private static final String SELECT_ALL_EMPLEADOS = "SELECT e.id, e.nombre, e.apellido, e.salario, d.name AS department_name, e.department_id\n" +
+            "FROM empleado e\n" +
+            "JOIN department d ON e.department_id = d.id;";
     public List<Employee> getAllEmployee() {
         List<Employee> employees = new ArrayList<>();
         try (Connection connection = conectionDB.getConnection();
@@ -50,7 +58,9 @@ public class EmployeeDAO {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 double salario = rs.getDouble("salario");
-                employees.add(new Employee(id, nombre, apellido, salario));
+                int departmentId = rs.getInt("department_id");
+                String deparmentName = rs.getString("department_name");
+                employees.add(new Employee(id, nombre, apellido, salario, departmentId, deparmentName));
             }
             connection.close();
             rs.close();
@@ -69,7 +79,7 @@ public class EmployeeDAO {
         }
         return rowDeleted;
     }
-    private static final String UPDATE_EMPLEADO_SQL = "UPDATE empleado SET nombre = ?, apellido = ?, salario = ? WHERE id = ?";
+    private static final String UPDATE_EMPLEADO_SQL = "UPDATE empleado SET nombre = ?, apellido = ?, salario = ?, department_id = ? WHERE id = ?";
     public boolean updateEmployee(Employee employee) throws SQLException {
         boolean rowUpdated;
         try (Connection connection = conectionDB.getConnection();
@@ -77,7 +87,8 @@ public class EmployeeDAO {
             statement.setString(1, employee.getNombre());
             statement.setString(2, employee.getApellido());
             statement.setDouble(3, employee.getSalario());
-            statement.setInt(4, employee.getId());
+            statement.setInt(4,employee.getDepartment_id());
+            statement.setInt(5, employee.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
         }

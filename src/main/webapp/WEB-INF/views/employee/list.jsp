@@ -79,6 +79,7 @@
             <th>Name</th>
             <th>Last Name</th>
             <th>Salary</th>
+            <th>Department</th>
             <th>Acctions</th>
         </tr>
         ${employees}

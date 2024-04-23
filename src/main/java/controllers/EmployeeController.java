@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 @WebServlet("/employee")
 public class EmployeeController extends HttpServlet {
     private EmployeeService employeeService;
@@ -35,6 +37,7 @@ public class EmployeeController extends HttpServlet {
                 employeeRepresentation += "<td>" + employee.getNombre() + "</td>";
                 employeeRepresentation += "<td>" + employee.getApellido() + "</td>";
                 employeeRepresentation += "<td>" + employee.getSalario() + "</td>";
+                employeeRepresentation += "<td>" + employee.getDepartmentName() + "</td>";
                 employeeRepresentation += "<td>";
                 employeeRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + employee.getId() + "' class=\"button action-link\">Edit</a>";
                 employeeRepresentation += "<a href='/webAppEmployee/employee/show?id=" + employee.getId() + "' class=\"button action-link\">Show</a>";
@@ -57,10 +60,12 @@ public class EmployeeController extends HttpServlet {
         String idStr = request.getParameter("id");
         int id = 0;
         if (idStr != null && !idStr.isEmpty()) {
-            id = Integer.parseInt(idStr);
+            id = parseInt(idStr);
         }
         String name = request.getParameter("name");
         String lastName = request.getParameter("lastName");
+        Integer departmentId = parseInt(request.getParameter("department_id"));
+        String departmentName = getInitParameter("department_name");
         String salaryStr = request.getParameter("salary");
         double salary;
         if (salaryStr != null && !salaryStr.isEmpty()) {
@@ -68,7 +73,7 @@ public class EmployeeController extends HttpServlet {
         } else {
             salary = 0.0;
         }
-        Employee newEmployee = new Employee(id, name, lastName, salary);
+        Employee newEmployee = new Employee(id, name, lastName, salary, departmentId, departmentName);
         try {
             if (newEmployee.getId()!= 0) {
                boolean employee = employeeService.updateEmployee(newEmployee);

@@ -56,6 +56,7 @@
         <p>Name: ${employee.nombre}</p>
         <p>Last Name: ${employee.apellido}</p>
         <p>Salary: ${employee.salario}</p>
+        <p>Department: ${employee.departmentName}</p>
         <br>
         <a href="/webAppEmployee/employee/edit?id=${employee.id}" class="button">Edit  Employee</a>
         <a href="/webAppEmployee/employee" class="button secondary">Go back to list</a>

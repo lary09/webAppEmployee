@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="models.Deparment" %>
+<%@ page import="service.DepartmentService" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -93,6 +97,15 @@
         <input type="text" id="lastName" name="lastName" value="${employee.lastName}" required><br>
         <label for="salary">Salary:</label>
         <input type="number" id="salary" name="salary" value="${employee.salary}" required><br>
+        <label for="department_id">Department Name</label>
+        <select name='department_id' required>
+           <%
+                DepartmentService departmentService = new DepartmentService();
+               List<Deparment> departments = departmentService.getAllDepartment();
+               for (Deparment department : departments) { %>
+                   <option value="<%= department.getId() %>"><%= department.getName() %></option>
+               <% } %>
+        </select>
         <div class="button-container">
             <input type="submit" value="Save">
             <a href="/webAppEmployee/employee" class="button secondary">Go to List</a>
