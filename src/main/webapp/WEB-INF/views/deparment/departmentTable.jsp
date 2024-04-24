@@ -10,19 +10,29 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
 
         .container {
             max-width: 800px;
             width: 90%;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .containerLink {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-right: 200px;
+        }
+
+        .containerLink a {
+           margin-left: 10px;
+           text-decoration: none;
+           color: #007bff;
         }
 
         h1 {
@@ -71,6 +81,10 @@
     </style>
 </head>
 <body>
+<div class="containerLink">
+    <a href="/webAppEmployee/">Home</a>
+    <a href="/webAppEmployee/employee">Employee list</a>
+</div>
 <div class="container">
     <h1>Employee List</h1>
     <table>

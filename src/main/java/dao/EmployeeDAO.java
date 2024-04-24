@@ -44,13 +44,16 @@ public class EmployeeDAO {
         }
         return employee;
     }
-    private static final String SELECT_ALL_EMPLEADOS = "SELECT e.id, e.nombre, e.apellido, e.salario, d.name AS department_name, e.department_id\n" +
-            "FROM empleado e\n" +
-            "JOIN department d ON e.department_id = d.id;";
-    public List<Employee> getAllEmployee() {
+    private static final String SELECT_ALL_EMPLEADOS = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+            "FROM empleado e JOIN department d ON e.department_id = d.id " +
+            "ORDER BY e.id LIMIT ? OFFSET ?";
+    public List<Employee> getAllEmployee(int pageNumber, int pageSize) {
         List<Employee> employees = new ArrayList<>();
+        int offset = (pageNumber - 1) * pageSize;
         try (Connection connection = conectionDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPLEADOS)) {
+            preparedStatement.setInt(1,pageSize);
+            preparedStatement.setInt(2, offset);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -93,5 +96,16 @@ public class EmployeeDAO {
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
+    }
+    public int getTotalEmployees() throws SQLException {
+        int totalEmployees = 0;
+        try (Connection connection = conectionDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM empleado")) {
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                totalEmployees = rs.getInt(1);
+            }
+        }
+        return totalEmployees;
     }
 }

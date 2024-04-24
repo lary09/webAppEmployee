@@ -26,11 +26,25 @@ public class EmployeeController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int currentPage = 1;
 
-        String employeeRepresentation = "";
-        List<Employee> employees = null;
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            currentPage = Integer.parseInt(pageParam);
+        }
+        int totalEmployees = 0;
         try {
-            employees = employeeService.getAllEmployee();
+            totalEmployees = employeeService.getTotalEmployee();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        int pageSize = 10;
+        int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+        List<Employee> employees = null;
+        String employeeRepresentation = "";
+        try {
+            employees = employeeService.getAllEmployee(currentPage,pageSize);
             for (Employee employee : employees) {
                 employeeRepresentation += "<tr>";
                 employeeRepresentation += "<td>" + employee.getId() + "</td>";
@@ -51,6 +65,8 @@ public class EmployeeController extends HttpServlet {
 
 
         request.setAttribute("employees", employeeRepresentation);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
 
     }

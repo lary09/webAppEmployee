@@ -19,8 +19,8 @@ public class EmployeeService {
         employeeDAO.insertEmployee(employee);
     }
 
-    public List<Employee> getAllEmployee() throws SQLException {
-        return employeeDAO.getAllEmployee();
+    public List<Employee> getAllEmployee(int pageNumber, int pageSize) throws SQLException {
+        return employeeDAO.getAllEmployee(pageNumber,pageSize);
     }
     public boolean updateEmployee(Employee employee) throws SQLException {
         return employeeDAO.updateEmployee(employee);
@@ -28,6 +28,9 @@ public class EmployeeService {
 
     public boolean deleteEmployee(int id) throws SQLException{
         return  employeeDAO.deleteEmployee(id);
+    }
+    public int getTotalEmployee() throws SQLException{
+        return employeeDAO.getTotalEmployees();
     }
 
 
