@@ -26,8 +26,24 @@ public class EmployeeController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String searchTerm = request.getParameter("search");
+        String pageParam = request.getParameter("page");
         int currentPage = 1;
+        if (pageParam != null && !pageParam.isEmpty()) {
+            currentPage = Integer.parseInt(pageParam);
+        }
+        if (searchTerm != null && !searchTerm.isEmpty()) {
 
+            searchEmployees(request, response, searchTerm, currentPage);
+        } else {
+            listEmployees(request, response);
+        }
+
+    }
+
+    private void listEmployees(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int currentPage = 1;
 
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
@@ -41,6 +57,7 @@ public class EmployeeController extends HttpServlet {
         }
         int pageSize = 10;
         int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+
         List<Employee> employees = null;
         String employeeRepresentation = "";
         try {
@@ -68,8 +85,51 @@ public class EmployeeController extends HttpServlet {
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
-
     }
+
+    private void searchEmployees(HttpServletRequest request, HttpServletResponse response, String searchTerm, int currentPage)
+            throws ServletException, IOException {
+
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            currentPage = Integer.parseInt(pageParam);
+        }
+        int totalEmployees = 0;
+        try {
+            totalEmployees = employeeService.getTotalEmployee();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        int pageSize = 10;
+        int totalPages = (int) Math.ceil((double) totalEmployees / pageSize);
+        List<Employee> searchResults = null;
+        String searchRepresentation = "";
+        try {
+            searchResults = employeeService.searchEmployee(searchTerm);
+            for (Employee employee : searchResults) {
+                searchRepresentation += "<tr>";
+                searchRepresentation += "<td>" + employee.getId() + "</td>";
+                searchRepresentation += "<td>" + employee.getNombre() + "</td>";
+                searchRepresentation += "<td>" + employee.getApellido() + "</td>";
+                searchRepresentation += "<td>" + employee.getSalario() + "</td>";
+                searchRepresentation += "<td>" + employee.getDepartmentName() + "</td>";
+                searchRepresentation += "<td>";
+                searchRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + employee.getId() + "' class=\"button action-link\">Edit</a>";
+                searchRepresentation += "<a href='/webAppEmployee/employee/show?id=" + employee.getId() + "' class=\"button action-link\">Show</a>";
+                searchRepresentation += "<a href='/webAppEmployee/employee/delete?id=" + employee.getId() + "' class=\"button action-link\">Delete</a>";
+                searchRepresentation += "</td>";
+                searchRepresentation += "</tr>";
+            }
+        } catch (SQLException e) {
+            searchRepresentation = "Search failed";
+        }
+
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("employees", searchRepresentation);
+        request.setAttribute("totalPages", totalPages);
+        request.getRequestDispatcher("/WEB-INF/views/employee/list.jsp").forward(request, response);
+}
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

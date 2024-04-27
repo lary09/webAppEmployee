@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Lista de Empleados</title>
     <style>
-    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -21,6 +20,20 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .containerLink {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-right: 200px;
+        }
+
+        .containerLink a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007bff;
         }
 
         h1 {
@@ -49,70 +62,42 @@
             background-color: #f2f2f2;
         }
 
-        .container form {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .container input[type="text"] {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px;
-        }
-
-        .container button[type="submit"] {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .container button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .pagination a {
-            display: inline-block;
-            padding: 8px 16px;
-            text-decoration: none;
-            color: #007bff;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            margin-right: 5px;
-        }
-
-        .pagination a.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .button {
+        a.button {
             display: inline-block;
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
-            margin-right: 10px;
         }
 
-        .button:hover {
+        a.button:hover {
             background-color: #0056b3;
         }
+
+        a.action-link {
+            margin-right: 10px;
+        }
+        .pagination {
+                    margin-top: 20px;
+                    text-align: center;
+                }
+
+                .pagination a {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    text-decoration: none;
+                    color: #007bff;
+                    border: 1px solid #007bff;
+                    border-radius: 5px;
+                    margin-right: 5px;
+                }
+
+                .pagination a.active {
+                    background-color: #007bff;
+                    color: white;
+                }
     </style>
-
-
-
 </head>
 <body>
 <div class="containerLink">
@@ -121,10 +106,6 @@
 </div>
 <div class="container">
     <h1>Employee List</h1>
-    <form action="/webAppEmployee/employee/search" method="GET">
-            <input type="text" name="search" placeholder="Search by name or last name">
-            <button type="submit" >Search</button>
-        </form>
     <table>
         <tr>
             <th>ID</th>

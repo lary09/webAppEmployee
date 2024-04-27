@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context docBase="C:\Users\lary_\Desktop\WebApp\webAppEmployee">
+  <Resources cacheMaxSize="10240">
+    <PreResources base="C:/Users/lary_/Desktop/WebApp/webAppEmployee/target/classes" className="org.apache.catalina.webresources.DirResourceSet" webAppMount="/WEB-INF/classes"/>
+    <PostResources base="C:/Users/lary_/.m2/repository/org/postgresql/postgresql/42.7.2/postgresql-42.7.2.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/postgresql-42.7.2.jar"/>
+    <PostResources base="C:/Users/lary_/.m2/repository/org/checkerframework/checker-qual/3.42.0/checker-qual-3.42.0.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/checker-qual-3.42.0.jar"/>
+    <PostResources base="C:/Users/lary_/.m2/repository/jstl/jstl/1.2/jstl-1.2.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/jstl-1.2.jar"/>
+    <PostResources base="C:/Users/lary_/.m2/repository/taglibs/standard/1.1.2/standard-1.1.2.jar" className="org.apache.catalina.webresources.FileResourceSet" webAppMount="/WEB-INF/lib/standard-1.1.2.jar"/>
+  </Resources>
+</Context>

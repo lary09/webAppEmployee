@@ -32,7 +32,9 @@ public class EmployeeService {
     public int getTotalEmployee() throws SQLException{
         return employeeDAO.getTotalEmployees();
     }
-
+    public List<Employee>searchEmployee(String searchTerm) throws SQLException{
+        return employeeDAO.searchEmployee(searchTerm);
+    }
 
 
 }

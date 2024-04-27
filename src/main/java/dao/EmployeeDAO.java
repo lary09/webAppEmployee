@@ -108,4 +108,30 @@ public class EmployeeDAO {
         }
         return totalEmployees;
     }
+    private static final String SEARCH_EMPLEADO_SQL = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+            "FROM empleado e JOIN department d ON e.department_id = d.id " +
+            "WHERE e.nombre LIKE ? OR e.apellido LIKE ?";
+    public List<Employee> searchEmployee(String searchTerm) {
+        List<Employee> employees = new ArrayList<>();
+        try (Connection connection = conectionDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_EMPLEADO_SQL)) {
+            String searchValue = "%" + searchTerm + "%";
+            preparedStatement.setString(1, searchValue);
+            preparedStatement.setString(2, searchValue);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                double salario = rs.getDouble("salario");
+                int departmentId = rs.getInt("department_id");
+                String departmentName = rs.getString("department_name");
+                employees.add(new Employee(id, nombre, apellido, salario, departmentId, departmentName));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
 }

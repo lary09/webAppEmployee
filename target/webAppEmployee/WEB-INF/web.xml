@@ -1,0 +1,94 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0">
+
+  <display-name>Archetype Created Web Application</display-name>
+
+  <servlet>
+    <servlet-name>home</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/home.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>home</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>form</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/form.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>form</servlet-name>
+    <url-pattern>/form</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>list</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/lis.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>list</servlet-name>
+    <url-pattern>/list</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>show</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/show.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>show</servlet-name>
+    <url-pattern>/show</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>edit</servlet-name>
+    <jsp-file>/WEB-INF/views/employee/edit.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>edit</servlet-name>
+    <url-pattern>/edit</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>departmentTable</servlet-name>
+    <jsp-file>/WEB-INF/views/deparment/departmentTable.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>departmentTable</servlet-name>
+    <url-pattern>/departmentTable</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  <servlet-name>createDepartment</servlet-name>
+  <jsp-file>/WEB-INF/views/deparment/createDepartment.jsp</jsp-file>
+</servlet>
+<servlet-mapping>
+<servlet-name>createDepartment</servlet-name>
+<url-pattern>/createDepartment</url-pattern>
+</servlet-mapping>
+  <servlet>
+    <servlet-name>departmentEdit</servlet-name>
+    <jsp-file>/WEB-INF/views/deparment/departmentEdit.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>departmentEdit</servlet-name>
+    <url-pattern>/departmentEdit</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>showDepartment</servlet-name>
+    <jsp-file>/WEB-INF/views/deparment/showDepartment.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>showDepartment</servlet-name>
+    <url-pattern>/showDepartment</url-pattern>
+  </servlet-mapping>
+
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <url-pattern>/WEB-INF/views/employee/*</url-pattern>
+      <url-pattern>/WEB-INF/views/department/*</url-pattern>
+    </jsp-property-group>
+  </jsp-config>
+
+</web-app>
+
+
