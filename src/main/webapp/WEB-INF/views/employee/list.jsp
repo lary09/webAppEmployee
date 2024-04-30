@@ -125,6 +125,10 @@
             <input type="text" name="search" placeholder="Search by name or last name">
             <button type="submit" >Search</button>
         </form>
+        <form action="upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv">
+            <button type="submit">Upload</button>
+        </form>
     <table>
         <tr>
             <th>ID</th>

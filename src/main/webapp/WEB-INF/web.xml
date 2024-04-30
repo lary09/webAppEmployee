@@ -80,6 +80,10 @@
     <servlet-name>showDepartment</servlet-name>
     <url-pattern>/showDepartment</url-pattern>
   </servlet-mapping>
+  <listener>
+    <listener-class>util.package.ConnectionPoolInitializer</listener-class>
+  </listener>
+
 
   <jsp-config>
     <jsp-property-group>

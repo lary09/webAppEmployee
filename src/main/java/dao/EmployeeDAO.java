@@ -2,6 +2,7 @@ package dao;
 
 import models.Employee;
 import util.ConectionDB;
+import util.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class EmployeeDAO {
     ConectionDB conectionDB = new ConectionDB();
     private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
     public void insertEmployee(Employee employee) throws SQLException {
-        Connection connection =conectionDB.getConnection();
+        Connection connection = ConnectionPool.getDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLEADO_SQL);
         preparedStatement.setString(1, employee.getNombre());
         preparedStatement.setString(2, employee.getApellido());

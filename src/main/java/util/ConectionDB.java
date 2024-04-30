@@ -12,7 +12,7 @@ public class ConectionDB {
         Connection connection = null;
         try {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(credentialsConection.getJdbcURL(), credentialsConection.getJdbcUsername(), credentialsConection.getJdbcPassword());
+            connection = ConnectionPool.getDataSource().getConnection();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

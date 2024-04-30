@@ -25,6 +25,14 @@ public class Employee {
         this.departmentName = departmentName;
     }
 
+    public Employee(int id, String name, String lastName, double salary, int department_Id) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.salary = salary;
+        this.department_id = department_Id;
+    }
+
     public int getId(){
         return id;
     }
