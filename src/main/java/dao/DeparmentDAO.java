@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeparmentDAO {
+    CredentialsConection credentialsConection = new CredentialsConection();
 
     private static final String DELETE_DEPARMENT = "DELETE FROM department WHERE id = ?";
-
-    ConectionDB conectionDB = new ConectionDB();
+    ConectionDB conectionDB = new ConectionDB( credentialsConection);
     private static final String INSERT_DEPARTMENT_SQL = "INSERT INTO department (name, description) VALUES (?,?)";
     public void insertDeparment(Deparment deparment) throws SQLException{
     Connection conection = conectionDB.getConnection();

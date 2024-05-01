@@ -5,6 +5,7 @@ dao\DeparmentDAO.class
 employeeViews\EmployeeEdit.class
 util\CredentialsConection.class
 controllers\EmployeeController.class
+controllers\FileUploadController.class
 controllers\DepartmentController.class
 departmentViews\DepartmentDelete.class
 employeeViews\EmployeeList.class
@@ -12,6 +13,7 @@ employeeViews\EmployyeCreate.class
 departmentViews\DepartmentShow.class
 models\Deparment.class
 models\Employee.class
+employeeViews\EmployeeDelete.class
 employeeViews\EmployeeShow.class
 departmentViews\DepartmentTable.class
 service\EmployeeService.class

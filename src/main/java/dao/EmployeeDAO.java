@@ -3,13 +3,15 @@ package dao;
 import models.Employee;
 import util.ConectionDB;
 import util.ConnectionPool;
+import util.CredentialsConection;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAO {
-    ConectionDB conectionDB = new ConectionDB();
+    CredentialsConection credentialsConection = new CredentialsConection();
+    ConectionDB conectionDB = new ConectionDB(credentialsConection);
     private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
     public void insertEmployee(Employee employee) throws SQLException {
         Connection connection = ConnectionPool.getDataSource().getConnection();

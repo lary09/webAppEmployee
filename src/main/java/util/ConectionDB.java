@@ -1,19 +1,20 @@
 package util;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConectionDB {
-    CredentialsConection credentialsConection = new CredentialsConection();
+    private final CredentialsConection credentialsConection;
 
+    public ConectionDB(CredentialsConection credentialsConection) {
+        this.credentialsConection = credentialsConection;
+    }
 
     public Connection getConnection() {
         Connection connection = null;
         try {
-            Class.forName("org.postgresql.Driver");
             connection = ConnectionPool.getDataSource().getConnection();
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return connection;

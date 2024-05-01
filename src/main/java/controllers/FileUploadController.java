@@ -22,9 +22,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-@WebServlet("/employee/upload")
+@WebServlet("/upload")
 public class FileUploadController extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException{
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException{
         if (ServletFileUpload.isMultipartContent((javax.servlet.http.HttpServletRequest) request)){
             try {
                 List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest((javax.servlet.http.HttpServletRequest) request);
