@@ -22,18 +22,25 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .containerLink {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-right: 200px;
+           display: flex;
+           justify-content: flex-end;
+           gap: 15px;
+           padding-right: 50px
+
         }
 
-        .containerLink a {
-           margin-left: 10px;
-           text-decoration: none;
-           color: #007bff;
-        }
+       .containerLink a {
+          text-decoration: none;
+          color: #007bff;
+          padding: 5px 10px;
+          border: 1px solid #007bff;
+          border-radius: 5px;
+       }
+
+       .containerLink a:hover {
+          background-color: #007bff;
+          color: #fff;
+       }
 
         h1 {
             color: #333;

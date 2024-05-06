@@ -1,20 +1,19 @@
 package dao;
 
+
 import models.Employee;
-import util.ConectionDB;
-import util.ConnectionPool;
-import util.CredentialsConection;
+import util.ConnectionDB;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeeDAO {
-    CredentialsConection credentialsConection = new CredentialsConection();
-    ConectionDB conectionDB = new ConectionDB(credentialsConection);
     private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
     public void insertEmployee(Employee employee) throws SQLException {
-        Connection connection = ConnectionPool.getDataSource().getConnection();
+        Connection connection = ConnectionDB.conn();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLEADO_SQL);
         preparedStatement.setString(1, employee.getNombre());
         preparedStatement.setString(2, employee.getApellido());
@@ -23,13 +22,28 @@ public class EmployeeDAO {
         preparedStatement.executeUpdate();
 
     }
+    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
+
+    public void insertEmployeesBatch(List<Employee> employees) throws SQLException {
+        Connection connection = ConnectionDB.conn();
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLOYEES_SQL);
+        for (Employee employee : employees) {
+            preparedStatement.setString(1, employee.getNombre());
+            preparedStatement.setString(2, employee.getApellido());
+            preparedStatement.setDouble(3, employee.getSalario());
+            preparedStatement.setInt(4, employee.getDepartment_id());
+            preparedStatement.addBatch(); // Agregar la instrucción de inserción al lote
+        }
+        preparedStatement.executeBatch(); // Ejecutar el lote de inserciones
+    }
+
 
     private static final String SELECT_EMPLEADO_BY_ID = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
             "FROM empleado e JOIN department d ON e.department_id = d.id " +
             "WHERE e.id = ?";
     public Employee getEmployeeById(int id) {
         Employee employee = null;
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPLEADO_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -53,7 +67,7 @@ public class EmployeeDAO {
     public List<Employee> getAllEmployee(int pageNumber, int pageSize) {
         List<Employee> employees = new ArrayList<>();
         int offset = (pageNumber - 1) * pageSize;
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPLEADOS)) {
             preparedStatement.setInt(1,pageSize);
             preparedStatement.setInt(2, offset);
@@ -78,7 +92,7 @@ public class EmployeeDAO {
     private static final String DELETE_EMPLEADO_SQL = "DELETE FROM empleado WHERE id = ?";
     public boolean deleteEmployee(int id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement statement = connection.prepareStatement(DELETE_EMPLEADO_SQL)) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
@@ -88,7 +102,7 @@ public class EmployeeDAO {
     private static final String UPDATE_EMPLEADO_SQL = "UPDATE empleado SET nombre = ?, apellido = ?, salario = ?, department_id = ? WHERE id = ?";
     public boolean updateEmployee(Employee employee) throws SQLException {
         boolean rowUpdated;
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement statement = connection.prepareStatement(UPDATE_EMPLEADO_SQL)) {
             statement.setString(1, employee.getNombre());
             statement.setString(2, employee.getApellido());
@@ -102,7 +116,7 @@ public class EmployeeDAO {
     }
     public int getTotalEmployees() throws SQLException {
         int totalEmployees = 0;
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM empleado")) {
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
@@ -116,7 +130,7 @@ public class EmployeeDAO {
             "WHERE e.nombre LIKE ? OR e.apellido LIKE ?";
     public List<Employee> searchEmployee(String searchTerm) {
         List<Employee> employees = new ArrayList<>();
-        try (Connection connection = conectionDB.getConnection();
+        try (Connection connection = ConnectionDB.conn();
              PreparedStatement preparedStatement = connection.prepareStatement(SEARCH_EMPLEADO_SQL)) {
             String searchValue = "%" + searchTerm + "%";
             preparedStatement.setString(1, searchValue);
@@ -137,4 +151,24 @@ public class EmployeeDAO {
         }
         return employees;
     }
+    private static final String REPORT_EMPLOYEES_BY_DEPARTMENT_SQL = "SELECT d.name AS department_name, COUNT(e.id) AS employee_count " +
+            "FROM empleado e JOIN department d ON e.department_id = d.id " +
+            "GROUP BY d.name";
+
+    public Map<String, Integer> getEmployeesByDepartmentReport() {
+        Map<String, Integer> report = new HashMap<>();
+        try (Connection connection = ConnectionDB.conn();
+             PreparedStatement preparedStatement = connection.prepareStatement(REPORT_EMPLOYEES_BY_DEPARTMENT_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String departmentName = resultSet.getString("department_name");
+                int employeeCount = resultSet.getInt("employee_count");
+                report.put(departmentName, employeeCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return report;
+    }
 }
+

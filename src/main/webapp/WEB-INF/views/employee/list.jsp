@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Empleados</title>
-    <style>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,34 +50,49 @@
 
         .container form {
             display: flex;
-            justify-content: flex-end;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .container input[type="text"] {
+        .container form input[type="text"] {
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            margin-right: 10px;
+            width: 100%;
         }
 
-        .container button[type="submit"] {
+        .container form button[type="submit"] {
             padding: 8px 16px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-left: 10px;
         }
 
-        .container button[type="submit"]:hover {
+        .container form button[type="submit"]:hover {
             background-color: #0056b3;
+        }
+        .search-upload-container{
+            display: flex;
+            justify-content: space-between;
+        }
+        .search-container, .upload-container {
+            width: 30%;
+            margin-right: 10px;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            text-align: center;
         }
 
         .pagination {
-            margin-top: 20px;
-            text-align: center;
+            margin-bottom: 20px;
         }
 
         .pagination a {
@@ -96,6 +110,12 @@
             color: white;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -109,10 +129,28 @@
         .button:hover {
             background-color: #0056b3;
         }
+
+        .containerLink {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-right: 50px
+
+        }
+
+        .containerLink a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .containerLink a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
     </style>
-
-
-
 </head>
 <body>
 <div class="containerLink">
@@ -121,14 +159,20 @@
 </div>
 <div class="container">
     <h1>Employee List</h1>
-    <form action="/webAppEmployee/employee/search" method="GET">
-            <input type="text" name="search" placeholder="Search by name or last name">
-            <button type="submit" >Search</button>
-        </form>
-        <form action="upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".csv">
-            <button type="submit">Upload</button>
-        </form>
+    <div class="search-upload-container">
+        <div class="search-container">
+            <form action="/webAppEmployee/employee/search" method="GET">
+                <input type="text" name="search" placeholder="Search by name or last name">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="upload-container">
+            <form action="/webAppEmployee/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".csv">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
     <table>
         <tr>
             <th>ID</th>
@@ -140,33 +184,37 @@
         </tr>
         ${employees}
     </table>
-    <div class="pagination">
+    <div class="pagination-container">
+        <div class="pagination">
             <% int currentPage = (Integer) request.getAttribute("currentPage"); %>
             <% if (request.getAttribute("currentPage") != null) { %>
-                <a href="?page=<%= currentPage - 1 %>">Previous</a>
-            <% } %>
-
-            <% if (request.getAttribute("totalPages") != null) { %>
-            <% int totalPages = (int) request.getAttribute("totalPages"); %>
-                <% for (int i = 1; i <= totalPages; i++) { %>
-                    <% if (i == currentPage) { %>
-                        <a href="?page=<%= i %>" class="active"><%= i %></a>
-                    <% } else { %>
-                        <a href="?page=<%= i %>"><%= i %></a>
+                <% int totalPages = (int) request.getAttribute("totalPages"); %>
+                <% if (currentPage > 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>">Previous</a>
+                <% } %>
+                <% if (currentPage > 1) { %>
+                    <a href="?page=1">1</a>
+                    <% if (currentPage > 2) { %>
+                        <span>...</span>
                     <% } %>
                 <% } %>
-            <% } %>
-
-            <% if (request.getAttribute("currentPage") != null && request.getAttribute("totalPages") != null) { %>
-                <% int totalPages = (int) request.getAttribute("totalPages"); %>
+                <span><%= currentPage %></span>
+                <% if (currentPage < totalPages) { %>
+                    <% if (currentPage < totalPages - 1) { %>
+                        <span>...</span>
+                    <% } %>
+                    <a href="?page=<%= totalPages %>"><%= totalPages %></a>
+                <% } %>
                 <% if (currentPage < totalPages) { %>
                     <a href="?page=<%= currentPage + 1 %>">Next</a>
                 <% } %>
             <% } %>
         </div>
-    <a href="/webAppEmployee/employee/create" class="button">Add a new Employee</a>
+        <div class="button-container">
+            <a href="/webAppEmployee/createEmployee" class="button">Create Employee</a>
+            <a href="/webAppEmployee/report" class="button">Report</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>
-
-

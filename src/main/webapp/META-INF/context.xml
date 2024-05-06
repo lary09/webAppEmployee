@@ -1,0 +1,18 @@
+<Context>
+    <Resource
+            name="jdbc/postgres"
+            auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="org.postgresql.Driver"
+            url="jdbc:postgresql://localhost:5432/CRUDEmployees"
+            username="postgres"
+            password="Amary0929"
+            maxTotal="5000"
+            maxIdle="100"
+            logAbandoned="true"
+            removeAbandonedTimeout="300"
+            removeAbandonedOnBorrow="true"
+            removeAbandonedOnMaintenance="true"
+            maxWaitMillis="600000"
+    />
+</Context>

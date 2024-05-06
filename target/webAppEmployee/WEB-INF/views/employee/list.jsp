@@ -125,7 +125,7 @@
             <input type="text" name="search" placeholder="Search by name or last name">
             <button type="submit" >Search</button>
         </form>
-        <form action="upload" method="post" enctype="multipart/form-data">
+        <form action="/webAppEmployee/employee/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept=".csv">
             <button type="submit">Upload</button>
         </form>

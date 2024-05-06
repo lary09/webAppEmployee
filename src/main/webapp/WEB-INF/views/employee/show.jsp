@@ -12,21 +12,54 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
 
         .container {
+            text-align: left;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
             text-align: center;
         }
 
-        p {
-            margin: 5px 0;
-            font-size: 16px;
-            color: #333;
+        .detail {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail strong {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .detail p {
+            display: inline-block;
+            margin: 0;
+            vertical-align: top;
         }
 
         a.button {
-            display: inline-block;
-            padding: 10px 20px;
+            display: block;
+            width: 100%;
+            padding: 10px 0;
             background-color: #4CAF50;
             color: white;
             text-align: center;
@@ -34,6 +67,7 @@
             font-size: 16px;
             border-radius: 5px;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
         a.button:hover {
@@ -52,15 +86,28 @@
 <body>
     <div class="container">
         <h1>Employee Details</h1>
-        <p>ID: ${employee.id}</p>
-        <p>Name: ${employee.nombre}</p>
-        <p>Last Name: ${employee.apellido}</p>
-        <p>Salary: ${employee.salario}</p>
-        <p>Department: ${employee.departmentName}</p>
-        <br>
-        <a href="/webAppEmployee/employee/edit?id=${employee.id}" class="button">Edit  Employee</a>
-        <a href="/webAppEmployee/employee" class="button secondary">Go back to list</a>
+        <div class="detail">
+            <strong>ID:</strong>
+            <p>${employee.id}</p>
+        </div>
+        <div class="detail">
+            <strong>Name:</strong>
+            <p>${employee.nombre}</p>
+        </div>
+        <div class="detail">
+            <strong>Last Name:</strong>
+            <p>${employee.apellido}</p>
+        </div>
+        <div class="detail">
+            <strong>Salary:</strong>
+            <p>${employee.salario}</p>
+        </div>
+        <div class="detail">
+            <strong>Department:</strong>
+            <p>${employee.departmentName}</p>
+        </div>
+        <a href="/webAppEmployee/employee/edit?id=${employee.id}" class="button">Editar Empleado</a>
+        <a href="/webAppEmployee/employee" class="button secondary">Volver a la lista</a>
     </div>
 </body>
 </html>
-
