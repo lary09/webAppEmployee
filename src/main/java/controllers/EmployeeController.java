@@ -68,6 +68,7 @@ public class EmployeeController extends HttpServlet {
                 employeeRepresentation += "<td>" + employee.getNombre() + "</td>";
                 employeeRepresentation += "<td>" + employee.getApellido() + "</td>";
                 employeeRepresentation += "<td>" + employee.getSalario() + "</td>";
+                employeeRepresentation += "<td>" + employee.getAge() + "</td>";
                 employeeRepresentation += "<td>" + employee.getDepartmentName() + "</td>";
                 employeeRepresentation += "<td>";
                 employeeRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + employee.getId() + "' class=\"button action-link\">Edit</a>";
@@ -113,6 +114,7 @@ public class EmployeeController extends HttpServlet {
                 searchRepresentation += "<td>" + employee.getNombre() + "</td>";
                 searchRepresentation += "<td>" + employee.getApellido() + "</td>";
                 searchRepresentation += "<td>" + employee.getSalario() + "</td>";
+                searchRepresentation += "<td>" + employee.getAge() + "</td>";
                 searchRepresentation += "<td>" + employee.getDepartmentName() + "</td>";
                 searchRepresentation += "<td>";
                 searchRepresentation += "<a href='/webAppEmployee/employee/edit?id=" + employee.getId() + "' class=\"button action-link\">Edit</a>";
@@ -143,27 +145,41 @@ public class EmployeeController extends HttpServlet {
         Integer departmentId = parseInt(request.getParameter("department_id"));
         String departmentName = getInitParameter("department_name");
         String salaryStr = request.getParameter("salary");
+        String ageStr  = request.getParameter("age");
+        int age;
+        if (ageStr != null && !ageStr.isEmpty()) {
+            age = Integer.parseInt(ageStr);
+        } else {
+            age = 0;
+        }
         double salary;
         if (salaryStr != null && !salaryStr.isEmpty()) {
             salary = Double.parseDouble(salaryStr);
         } else {
             salary = 0.0;
         }
-        Employee newEmployee = new Employee(id, name, lastName, salary, departmentId, departmentName);
+        Employee newEmployee = new Employee(id, name, lastName, salary, age,departmentId, departmentName);
         try {
-            if (newEmployee.getId()!= 0) {
-               boolean employee = employeeService.updateEmployee(newEmployee);
-                request.setAttribute("employee", employee);
+            boolean isDuplicate = employeeService.isEmployeeDuplicate(newEmployee);
+            if (!isDuplicate) {
+                if (newEmployee.getId() != 0) {
+                    boolean employeeUpdated = employeeService.updateEmployee(newEmployee);
+                    request.setAttribute("employeeUpdated", employeeUpdated);
+                } else {
+                    employeeService.insertEmployee(newEmployee);
+                }
             } else {
-                employeeService.insertEmployee(newEmployee);
+
+                System.out.println("El empleado ya existe en la base de datos. No se ha agregado ni actualizado.");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        //request.getRequestDispatcher("/WEB-INF/views/employee/form.jsp").forward(request, response);
-        response.sendRedirect( "/webAppEmployee/employee");
+
+        response.sendRedirect("/webAppEmployee/employee");
     }
+
 
 
 }

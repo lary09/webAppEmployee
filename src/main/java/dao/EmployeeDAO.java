@@ -11,18 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class EmployeeDAO {
-    private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_EMPLEADO_SQL = "INSERT INTO empleado (nombre, apellido, salario, age, department_id) VALUES (?, ?, ?, ?, ?)";
     public void insertEmployee(Employee employee) throws SQLException {
         Connection connection = ConnectionDB.conn();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLEADO_SQL);
         preparedStatement.setString(1, employee.getNombre());
         preparedStatement.setString(2, employee.getApellido());
         preparedStatement.setDouble(3, employee.getSalario());
-        preparedStatement.setInt(4, employee.getDepartment_id());
+        preparedStatement.setInt(4, employee.getAge());
+        preparedStatement.setInt(5, employee.getDepartment_id());
         preparedStatement.executeUpdate();
 
     }
-    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO empleado (nombre, apellido, salario, department_id) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO empleado (nombre, apellido, salario,age, department_id) VALUES (?, ?, ?, ?,?)";
 
     public void insertEmployeesBatch(List<Employee> employees) throws SQLException {
         Connection connection = ConnectionDB.conn();
@@ -31,14 +32,15 @@ public class EmployeeDAO {
             preparedStatement.setString(1, employee.getNombre());
             preparedStatement.setString(2, employee.getApellido());
             preparedStatement.setDouble(3, employee.getSalario());
-            preparedStatement.setInt(4, employee.getDepartment_id());
-            preparedStatement.addBatch(); // Agregar la instrucción de inserción al lote
+            preparedStatement.setInt(4, employee.getAge());
+            preparedStatement.setInt(5, employee.getDepartment_id());
+            preparedStatement.addBatch();
         }
-        preparedStatement.executeBatch(); // Ejecutar el lote de inserciones
+        preparedStatement.executeBatch();
     }
 
 
-    private static final String SELECT_EMPLEADO_BY_ID = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+    private static final String SELECT_EMPLEADO_BY_ID = "SELECT e.id, e.nombre, e.apellido, e.salario, e.age, e.department_id, d.name AS department_name " +
             "FROM empleado e JOIN department d ON e.department_id = d.id " +
             "WHERE e.id = ?";
     public Employee getEmployeeById(int id) {
@@ -53,15 +55,16 @@ public class EmployeeDAO {
                 String apellido = rs.getString("apellido");
                 double salario = rs.getDouble("salario");
                 String departmentName = rs.getString("department_name");
+                int age = rs.getInt("age");
                 int departmentId = rs.getInt("department_id");
-                employee = new Employee(id, nombre, apellido, salario, departmentId, departmentName);
+                employee = new Employee(id, nombre, apellido, salario,age, departmentId, departmentName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return employee;
     }
-    private static final String SELECT_ALL_EMPLEADOS = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+    private static final String SELECT_ALL_EMPLEADOS = "SELECT e.id, e.nombre, e.apellido, e.salario,e.age, e.department_id, d.name AS department_name " +
             "FROM empleado e JOIN department d ON e.department_id = d.id " +
             "ORDER BY e.id LIMIT ? OFFSET ?";
     public List<Employee> getAllEmployee(int pageNumber, int pageSize) {
@@ -78,9 +81,10 @@ public class EmployeeDAO {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 double salario = rs.getDouble("salario");
+                int age = rs.getInt("age");
                 int departmentId = rs.getInt("department_id");
                 String deparmentName = rs.getString("department_name");
-                employees.add(new Employee(id, nombre, apellido, salario, departmentId, deparmentName));
+                employees.add(new Employee(id, nombre, apellido, salario,age, departmentId, deparmentName));
             }
             connection.close();
             rs.close();
@@ -89,6 +93,23 @@ public class EmployeeDAO {
         }
         return employees;
     }
+    public boolean isEmployeeDuplicate(Employee employee) throws SQLException {
+        try (Connection connection = ConnectionDB.conn();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) AS count " +
+                     "FROM empleado " +
+                     "WHERE nombre = ? AND apellido = ?")) {
+            preparedStatement.setString(1, employee.getNombre());
+            preparedStatement.setString(2, employee.getApellido());
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0; // Si count > 0, significa que hay empleados duplicados
+            }
+        }
+        return false;
+    }
+
     private static final String DELETE_EMPLEADO_SQL = "DELETE FROM empleado WHERE id = ?";
     public boolean deleteEmployee(int id) throws SQLException {
         boolean rowDeleted;
@@ -99,7 +120,7 @@ public class EmployeeDAO {
         }
         return rowDeleted;
     }
-    private static final String UPDATE_EMPLEADO_SQL = "UPDATE empleado SET nombre = ?, apellido = ?, salario = ?, department_id = ? WHERE id = ?";
+    private static final String UPDATE_EMPLEADO_SQL = "UPDATE empleado SET nombre = ?, apellido = ?, salario = ?,age = ?, department_id = ? WHERE id = ?";
     public boolean updateEmployee(Employee employee) throws SQLException {
         boolean rowUpdated;
         try (Connection connection = ConnectionDB.conn();
@@ -107,6 +128,7 @@ public class EmployeeDAO {
             statement.setString(1, employee.getNombre());
             statement.setString(2, employee.getApellido());
             statement.setDouble(3, employee.getSalario());
+            statement.setInt(4,employee.getAge());
             statement.setInt(4,employee.getDepartment_id());
             statement.setInt(5, employee.getId());
 
@@ -114,6 +136,7 @@ public class EmployeeDAO {
         }
         return rowUpdated;
     }
+
     public int getTotalEmployees() throws SQLException {
         int totalEmployees = 0;
         try (Connection connection = ConnectionDB.conn();
@@ -125,7 +148,7 @@ public class EmployeeDAO {
         }
         return totalEmployees;
     }
-    private static final String SEARCH_EMPLEADO_SQL = "SELECT e.id, e.nombre, e.apellido, e.salario, e.department_id, d.name AS department_name " +
+    private static final String SEARCH_EMPLEADO_SQL = "SELECT e.id, e.nombre, e.apellido, e.salario,e.age, e.department_id, d.name AS department_name " +
             "FROM empleado e JOIN department d ON e.department_id = d.id " +
             "WHERE e.nombre LIKE ? OR e.apellido LIKE ?";
     public List<Employee> searchEmployee(String searchTerm) {
@@ -142,9 +165,10 @@ public class EmployeeDAO {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 double salario = rs.getDouble("salario");
+                int age = rs.getInt("age");
                 int departmentId = rs.getInt("department_id");
                 String departmentName = rs.getString("department_name");
-                employees.add(new Employee(id, nombre, apellido, salario, departmentId, departmentName));
+                employees.add(new Employee(id, nombre, apellido, salario,age, departmentId, departmentName));
             }
         } catch (SQLException e) {
             e.printStackTrace();

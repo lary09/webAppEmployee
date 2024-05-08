@@ -179,6 +179,7 @@
             <th>Name</th>
             <th>Last Name</th>
             <th>Salary</th>
+            <th>Age</th>
             <th>Department</th>
             <th>Actions</th>
         </tr>
@@ -211,7 +212,7 @@
             <% } %>
         </div>
         <div class="button-container">
-            <a href="/webAppEmployee/createEmployee" class="button">Create Employee</a>
+            <a href="/webAppEmployee/employee/create" class="button">Create Employee</a>
             <a href="/webAppEmployee/report" class="button">Report</a>
         </div>
     </div>

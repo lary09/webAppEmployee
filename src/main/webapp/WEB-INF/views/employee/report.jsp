@@ -48,6 +48,18 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .container a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+
+        .container a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -61,30 +73,10 @@
                 </tr>
             </thead>
             <tbody>
-                <%-- Java code to dynamically generate table rows --%>
                 <%@ page import="java.util.Map" %>
-                <%@ page import="java.util.HashMap" %>
-                <%@ page import="java.util.List" %>
-                <%@ page import="java.util.ArrayList" %>
-                <%@ page import="java.util.Random" %>
-                <%!
-                    // Método para simular datos de informe de empleados por departamento
-                    public Map<String, Integer> generateReportData() {
-                        Map<String, Integer> reportData = new HashMap<>();
-                        Random random = new Random();
-                        reportData.put("Department 1", random.nextInt(20) + 1);
-                        reportData.put("Department 2", random.nextInt(20) + 1);
-                        reportData.put("Department 3", random.nextInt(20) + 1);
-                        return reportData;
-                    }
-                %>
-                <%
-                    // Obtener los datos del informe
-                    Map<String, Integer> reportData = generateReportData();
-
-                    // Iterar sobre los datos del informe y generar filas de tabla dinámicamente
-                    for (Map.Entry<String, Integer> entry : reportData.entrySet()) {
-                %>
+                <%@ page import="java.util.Map.Entry" %>
+                <% Map<String, Integer> reportData = (Map<String, Integer>) request.getAttribute("reportData"); %>
+                <% for (Entry<String, Integer> entry : reportData.entrySet()) { %>
                 <tr>
                     <td><%= entry.getKey() %></td>
                     <td><%= entry.getValue() %></td>
@@ -92,6 +84,7 @@
                 <% } %>
             </tbody>
         </table>
+        <a  href="/webAppEmployee/employee">Go back to list</a>
     </div>
 </body>
 </html>

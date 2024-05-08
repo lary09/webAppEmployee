@@ -97,6 +97,8 @@
         <input type="text" id="lastName" name="lastName" value="${employee.lastName}" required><br>
         <label for="salary">Salary:</label>
         <input type="number" id="salary" name="salary" value="${employee.salary}" required><br>
+        <label for="salary">Age:</label>
+        <input type="number" id="age" name="age" value="${employee.age}" required><br>
         <label for="department_id">Department Name</label>
         <select name='department_id' required>
            <%

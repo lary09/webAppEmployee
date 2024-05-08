@@ -29,21 +29,20 @@ public class FileUploadController extends HttpServlet {
                 processCSV(filePart.getInputStream());
                 response.sendRedirect("/webAppEmployee/employee");
             } catch (SQLException e) {
-                throw new ServletException("Error al procesar el archivo CSV", e);
+                throw new ServletException("Error to process the CSV file", e);
             }
         } else {
-            response.getWriter().println("Por favor, sube un archivo CSV.");
+            response.getWriter().println("Please, a csv file.");
         }
     }
 
     private void processCSV(InputStream inputStream) throws IOException, SQLException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             String line;
-            int batchSize = 20000; // Tamaño del lote
+            int batchSize = 20000;
             int count = 0;
             EmployeeService employeeService = new EmployeeService();
-            //employeeService.startTransaction(); // Comienza la transacción
-            List<Employee> batchEmployees = new ArrayList<>(); // Lista para almacenar los empleados del lote
+            List<Employee> batchEmployees = new ArrayList<>();
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length == 5) {
@@ -51,17 +50,17 @@ public class FileUploadController extends HttpServlet {
                     batchEmployees.add(newEmployee);
                     count++;
                     if (count % batchSize == 0) {
-                        // Insertar el lote de empleados
+
                         employeeService.insertEmployeesBatch(batchEmployees);
-                        batchEmployees.clear(); // Limpiar la lista para el próximo lote
+                        batchEmployees.clear();
                     }
                 }
             }
-            // Insertar cualquier empleado restante en el lote
+
             if (!batchEmployees.isEmpty()) {
                 employeeService.insertEmployeesBatch(batchEmployees);
             }
-            employeeService.commit(); // Confirmar la transacción al final
+            employeeService.commit();
         }
     }
 
@@ -72,8 +71,9 @@ public class FileUploadController extends HttpServlet {
         String name = fields[1].trim();
         String lastName = fields[2].trim();
         double salary = Double.parseDouble(fields[3].trim().replace("$", ""));
+        int age = Integer.parseInt(fields[4]);
         int departmentId = Integer.parseInt(fields[4].trim());
-        return new Employee( id,name, lastName, salary, departmentId);
+        return new Employee( id,name, lastName, salary,age, departmentId);
     }
 
 }

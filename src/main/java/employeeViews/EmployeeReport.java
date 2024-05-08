@@ -1,4 +1,4 @@
-package controllers;
+package employeeViews;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,10 +10,8 @@ import service.EmployeeService;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
-@WebServlet("/report")
-public class ReportController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
+@WebServlet("/report/showReport")
+public class EmployeeReport extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EmployeeService employeeService = new EmployeeService();
         try {

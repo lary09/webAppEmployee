@@ -43,8 +43,8 @@ public class EmployeeService {
     public Map<String, Integer>getEmployeesByDepartmentReport() throws SQLException{
         return employeeDAO.getEmployeesByDepartmentReport();
     }
-    public void startTransaction() throws SQLException {
-        connection.setAutoCommit(false);
+    public boolean isEmployeeDuplicate(Employee employee) throws SQLException {
+        return employeeDAO.isEmployeeDuplicate(employee);
     }
     public void commit() throws SQLException {
         if (connection != null) {

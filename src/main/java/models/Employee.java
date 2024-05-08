@@ -5,31 +5,35 @@ public class Employee {
     private String name;
     private String lastName;
     private double salary;
+    private int age;
     private String departmentName;
     private Integer department_id;
 
     public Employee() {}
 
-    public Employee( String name, String lastName, double salary, Integer department_id) {
+    public Employee( String name, String lastName,int age, double salary, Integer department_id) {
         this.name = name;
         this.lastName = lastName;
         this.salary = salary;
+        this.age = age;
         this.department_id = department_id;
     }
-    public Employee(int id, String name, String lastName, double salary, Integer department_id, String departmentName) {
+    public Employee(int id, String name, String lastName, double salary,int age, Integer department_id, String departmentName) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.salary = salary;
+        this.age = age;
         this.department_id = department_id;
         this.departmentName = departmentName;
     }
 
-    public Employee(int id, String name, String lastName, double salary, int department_Id) {
+    public Employee(int id, String name, String lastName, double salary,int age, int department_Id) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.salary = salary;
+        this.age = age;
         this.department_id = department_Id;
     }
 
@@ -57,6 +61,8 @@ public class Employee {
     public void setSalario(double salary){
         this.salary =salary;
     }
+    public int getAge(){ return age;}
+    public void setAge(int age){this.age = age;}
     public int getDepartment_id() {
         return department_id;
     }
